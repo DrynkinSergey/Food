@@ -88,32 +88,87 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Modal
 
+    const modal = document.querySelector('.modal');
     const modals = document.querySelectorAll('[data-modal]');
+    const closeModalBtn = document.querySelector('.modal__close');
+
     modals.forEach(btn => {
         btn.addEventListener('click', showModal);
     })
 
-    function showModal() {
-        const modal = document.querySelector('.modal'),
-              closeModal = document.querySelector('.modal__close');
+    closeModalBtn.addEventListener('click', closeModal);
 
+
+    function closeModal () {
+         modal.classList.remove('show');
+         document.body.style.overflow = '';
+     }
+
+    function showModal() {
         modal.classList.toggle('show');
+        document.body.style.overflow = 'hidden';
+
         modal.addEventListener('click', (e) => {
             if(modal.classList.contains('show') && e.target === modal) {
                 modal.classList.remove('show');
+                document.body.style.overflow = '';
             }
-        })
-        if(modal.classList.contains('show')) {
-            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    function openModalWhenEndScroll () {
+        if(window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight){
+            showModal();
+            window.removeEventListener('scroll', openModalWhenEndScroll);
+        }
+    }
+    window.addEventListener('scroll', openModalWhenEndScroll);
+
+    //Cards
+
+    const card = document.querySelector('.menu__item'),
+            src= card.querySelector('[src]'),
+            title = card.querySelector('.menu__item-subtitle'),
+            alt = card.querySelector('[alt]'),
+            descr = card.querySelector('.menu__item-descr'),
+            price = card.querySelector('.menu__item-total');
+    const menu = document.querySelector('.menu__field'),
+        menuContainer = menu.querySelector('.container');
+
+
+    class MenuCard {
+        constructor(src, title, alt, descr, price) {
+        this.src = src;
+        this.title = title;
+        this.alt = alt;
+        this.descr = descr;
+        this.price = price;
+        }
+        addCard() {
+
+            menuContainer.innerHTML += ` <div class="menu__item">
+                    <img src="${this.src}" alt='${this.alt}'>
+                    <h3 class="menu__item-subtitle">${this.title}</h3>
+                    <div class="menu__item-descr">${this.descr}</div>
+                    <div class="menu__item-divider"></div>
+                    <div class="menu__item-price">
+                        <div class="menu__item-cost">Цена:</div>
+                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
+                    </div>
+                </div>`
+
 
         }
+    }
+    function eraseMenuCard () {
+        menuContainer.innerHTML = '';
+        menuContainer.style.flexWrap = 'wrap';
 
-
-
-        closeModal.addEventListener('click', () => {
-            modal.classList.remove('show');
-         document.body.style.overflow = '';
-        });
+    }
+    eraseMenuCard()
+    const v2=  new MenuCard("img/tabs/vegy.jpg",2,1,2,12222);
+    for (let i = 0; i < 5; i++) {
+        v2.addCard();
     }
 
 });
