@@ -41,7 +41,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Timer
 
-    const deadline = '2022-01-30';
+    const deadline = '2022-02-30';
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -126,27 +126,29 @@ window.addEventListener('DOMContentLoaded', () => {
 
     //Cards
 
-    const card = document.querySelector('.menu__item'),
-            src= card.querySelector('[src]'),
-            title = card.querySelector('.menu__item-subtitle'),
-            alt = card.querySelector('[alt]'),
-            descr = card.querySelector('.menu__item-descr'),
-            price = card.querySelector('.menu__item-total');
-    const menu = document.querySelector('.menu__field'),
-        menuContainer = menu.querySelector('.container');
 
 
-    class MenuCard {
-        constructor(src, title, alt, descr, price) {
+
+    class  MenuCard {
+        constructor(src, title, alt, descr, price,parentSelector,...classes) {
         this.src = src;
         this.title = title;
         this.alt = alt;
+        this.classes = classes;
         this.descr = descr;
         this.price = price;
+        this.parent = document.querySelector(parentSelector)
         }
         addCard() {
+            const element = document.createElement('div');
+            if(this.classes.length === 0) {
+                this.element = 'menu__item';
+              element.classList.add(this.element)
+            } else {
+                this.classes.forEach(className => element.classList.add(className));
 
-            menuContainer.innerHTML += ` <div class="menu__item">
+            }
+            element.innerHTML = ` 
                     <img src="${this.src}" alt='${this.alt}'>
                     <h3 class="menu__item-subtitle">${this.title}</h3>
                     <div class="menu__item-descr">${this.descr}</div>
@@ -154,21 +156,36 @@ window.addEventListener('DOMContentLoaded', () => {
                     <div class="menu__item-price">
                         <div class="menu__item-cost">Цена:</div>
                         <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
-                </div>`
-
-
+                </div>`;
+                this.parent.append(element);
         }
     }
-    function eraseMenuCard () {
-        menuContainer.innerHTML = '';
-        menuContainer.style.flexWrap = 'wrap';
 
-    }
-    eraseMenuCard()
-    const v2=  new MenuCard("img/tabs/vegy.jpg",2,1,2,12222);
-    for (let i = 0; i < 5; i++) {
-        v2.addCard();
-    }
+
+   new MenuCard(
+       'img/tabs/vegy.jpg',
+       'Меню "Фитнес',
+       'vegy',
+       'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
+       229,
+       '.menu .container'
+
+   ).addCard();
+    new MenuCard(
+        'img/tabs/elite.jpg',
+        'Меню “Премиум”',
+        'elite',
+        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
+        550,
+        '.menu .container'
+    ).addCard();
+    new MenuCard(
+        'img/tabs/post.jpg',
+        'Меню "Постное"',
+        'post',
+        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков. ',
+        430,
+        '.menu .container'
+    ).addCard();
 
 });
