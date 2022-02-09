@@ -261,7 +261,50 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     }
 
-    fetch(' http://localhost:3000/menu')
-        .then(data => data.json())
-        .then(res => console.log(res));
+    //slider
+
+
+    const slider = document.querySelector('.offer__slider');
+    const sliderItem = slider.querySelectorAll('.offer__slide');
+    let currentItem = 1;
+    const nextSlide = slider.querySelector('.offer__slider-next');
+    const prevSlide = slider.querySelector('.offer__slider-prev');
+    const current = slider.querySelector('#current');
+
+
+
+    setActiveSlide(currentItem);
+    function changeCurrentIndex(){
+        if (currentItem<=9){
+            current.textContent = `0${currentItem}`;
+        }
+    }
+    nextSlide.addEventListener('click',() => {
+        ++currentItem;
+        if(currentItem <= sliderItem.length){
+            setActiveSlide(currentItem);
+        } else {
+            currentItem=1;
+            setActiveSlide(currentItem);
+        }
+        changeCurrentIndex();
+
+    })
+    prevSlide.addEventListener('click',() => {
+        --currentItem;
+        if(currentItem <= 0){
+            currentItem=sliderItem.length;
+            setActiveSlide(currentItem);
+        } else {
+            setActiveSlide(currentItem);
+        }
+        changeCurrentIndex();
+
+    })
+
+    function setActiveSlide(index){
+        sliderItem.forEach(item => item.style.display='none')
+        sliderItem[index-1].style.display='block'
+    }
+
 });
