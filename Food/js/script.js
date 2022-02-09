@@ -132,7 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     class MenuCard {
-        constructor(src, alt,title, descr, price, parentSelector, ...classes) {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.title = title;
             this.alt = alt;
@@ -166,15 +166,15 @@ window.addEventListener('DOMContentLoaded', () => {
     const getData = async (url) => {
         const res = await fetch(url);
 
-        if(!res.ok ){
+        if (!res.ok) {
             throw new Error(`Could not fetch ${url} status ${res.status}`)
         }
         return await res.json();
     }
-    getData( 'http://localhost:3000/menu')
+    getData('http://localhost:3000/menu')
         .then(data => {
-            data.forEach(({img, altimg,title,descr,price}) => {
-                new MenuCard(img, altimg,title,descr,price, '.menu .container').addCard();
+            data.forEach(({img, altimg, title, descr, price}) => {
+                new MenuCard(img, altimg, title, descr, price, '.menu .container').addCard();
             });
         });
 
@@ -267,44 +267,55 @@ window.addEventListener('DOMContentLoaded', () => {
     const slider = document.querySelector('.offer__slider');
     const sliderItem = slider.querySelectorAll('.offer__slide');
     let currentItem = 1;
-    const nextSlide = slider.querySelector('.offer__slider-next');
-    const prevSlide = slider.querySelector('.offer__slider-prev');
-    const current = slider.querySelector('#current');
+    const nextSlide = slider.querySelector('.offer__slider-next'),
+        prevSlide = slider.querySelector('.offer__slider-prev'),
+        current = slider.querySelector('#current'),
+        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
+        slidesField = slidesWrapper.querySelector('.offer__slider-inner');
 
+    let width = window.getComputedStyle(slidesWrapper).width;
+    let offset = 0;
 
+    slidesField.style.width = 100 * sliderItem.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '.5s all'
+    sliderItem.forEach(slide => {
+        slide.style.width = width;
+    });
+    slidesWrapper.style.overflow = 'hidden';
+    if (currentItem <= 9) {
+        current.textContent = `0${currentItem}`;
+    }
 
-    setActiveSlide(currentItem);
-    function changeCurrentIndex(){
-        if (currentItem<=9){
+    nextSlide.addEventListener('click', ()=> {
+        if(offset == +width.slice(0, width.length - 2) * (sliderItem.length - 1))  {
+            offset = 0;
+        } else {
+            offset+= +width.slice(0, width.length - 2)
+        }
+        slidesField.style.transform = `translateX(-${offset}px)`;
+        if (currentItem >= sliderItem.length) {
+            currentItem = 0;
             current.textContent = `0${currentItem}`;
         }
-    }
-    nextSlide.addEventListener('click',() => {
-        ++currentItem;
-        if(currentItem <= sliderItem.length){
-            setActiveSlide(currentItem);
-        } else {
-            currentItem=1;
-            setActiveSlide(currentItem);
-        }
-        changeCurrentIndex();
+        currentItem++;
+        current.textContent = `0${currentItem}`;
+    });
 
-    })
-    prevSlide.addEventListener('click',() => {
-        --currentItem;
-        if(currentItem <= 0){
-            currentItem=sliderItem.length;
-            setActiveSlide(currentItem);
+    prevSlide.addEventListener('click', ()=> {
+        if( offset == 0)  {
+            offset = +width.slice(0, width.length - 2) * (sliderItem.length - 1)
         } else {
-            setActiveSlide(currentItem);
+            offset-= +width.slice(0, width.length - 2)
         }
-        changeCurrentIndex();
-
+        slidesField.style.transform = `translateX(-${offset}px)`;
+        if (currentItem <= 1) {
+            currentItem = sliderItem.length+1;
+            current.textContent = `0${currentItem}`;
+        }
+            currentItem--;
+        current.textContent = `0${currentItem}`;
     })
 
-    function setActiveSlide(index){
-        sliderItem.forEach(item => item.style.display='none')
-        sliderItem[index-1].style.display='block'
-    }
 
 });
