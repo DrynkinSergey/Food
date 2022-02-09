@@ -1,0 +1,22 @@
+{
+  "name": "learnjs",
+  "version": "1.0.0",
+  "description": "I am started learn js, react and some features on JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrynkinSergey/learnJs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrynkinSergey/learnJs/issues"
+  },
+  "homepage": "https://github.com/DrynkinSergey/learnJs#readme",
+  "devDependencies": {
+    "json-server": "^0.17.0"
+  }
+}
