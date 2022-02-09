@@ -132,7 +132,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 
     class MenuCard {
-        constructor(src, title, alt, descr, price, parentSelector, ...classes) {
+        constructor(src, alt,title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.title = title;
             this.alt = alt;
@@ -149,7 +149,6 @@ window.addEventListener('DOMContentLoaded', () => {
                 element.classList.add(this.element)
             } else {
                 this.classes.forEach(className => element.classList.add(className));
-
             }
             element.innerHTML = ` 
                     <img src="${this.src}" alt='${this.alt}'>
@@ -164,31 +163,20 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    const getData = async (url) => {
+        const res = await fetch(url);
 
-    new MenuCard(
-        'img/tabs/vegy.jpg',
-        'Меню "Фитнес',
-        'vegy',
-        'Меню "Фитнес" - это новый подход к приготовлению блюд: больше свежих овощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальной ценой и высоким качеством!',
-        229,
-        '.menu .container'
-    ).addCard();
-    new MenuCard(
-        'img/tabs/elite.jpg',
-        'Меню “Премиум”',
-        'elite',
-        'В меню “Премиум” мы используем не только красивый дизайн упаковки, но и качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без похода в ресторан!',
-        550,
-        '.menu .container'
-    ).addCard();
-    new MenuCard(
-        'img/tabs/post.jpg',
-        'Меню "Постное"',
-        'post',
-        'Меню “Постное” - это тщательный подбор ингредиентов: полное отсутствие продуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильное количество белков за счет тофу и импортных вегетарианских стейков. ',
-        430,
-        '.menu .container'
-    ).addCard();
+        if(!res.ok ){
+            throw new Error(`Could not fetch ${url} status ${res.status}`)
+        }
+        return await res.json();
+    }
+    getData( 'http://localhost:3000/menu')
+        .then(data => {
+            data.forEach(({img, altimg,title,descr,price}) => {
+                new MenuCard(img, altimg,title,descr,price, '.menu .container').addCard();
+            });
+        });
 
 
     //Forms
@@ -200,10 +188,22 @@ window.addEventListener('DOMContentLoaded', () => {
         failure: 'Ошибка'
     }
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     })
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await fetch(url, {
+            method: "POST",
+            headers:
+                {
+                    'Content-type': 'application/json; charset=utf-8'
+                },
+            body: data
+        });
+        return await res.json();
+    }
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             let statusMessage = document.createElement('img');
@@ -215,28 +215,17 @@ window.addEventListener('DOMContentLoaded', () => {
             form.insertAdjacentElement('afterend', statusMessage);
 
             const formData = new FormData(form);
-            const object = {};
-            formData.forEach(function (value, key) {
-                object[key] = value;
-            });
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            fetch('server.php', {
-                method: "POST",
-                headers:
-                    {
-                        'Content-type': 'application/json; charset=utf-8'
-                    },
-                body: JSON.stringify(object)
-
-            }).then(data => data.text())
+            postData(' http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showModalThanks(message.success);
                 })
-                .catch(()=> {
+                .catch(() => {
                     showModalThanks(message.failure);
                 })
-                .finally(()=>{
+                .finally(() => {
                     form.reset();
                     statusMessage.remove();
 
@@ -271,4 +260,8 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 3000);
     }
+
+    fetch(' http://localhost:3000/menu')
+        .then(data => data.json())
+        .then(res => console.log(res));
 });

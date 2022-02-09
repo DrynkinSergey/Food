@@ -225,7 +225,6 @@ a {
 .tabheader__item {
     font-weight: 700;
     font-size: 18px;
-    font-weight: 300;
     margin-top: 10px;
     color: rgba(0, 0, 0, .6);
     cursor: pointer;
@@ -457,7 +456,8 @@ a {
 
 .menu .container {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    flex-wrap: wrap;
     align-items: flex-start
 }
 
@@ -739,4 +739,3 @@ a {
     }
 }
 
-}
