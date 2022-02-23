@@ -322,5 +322,40 @@ window.addEventListener('DOMContentLoaded', () => {
         current.textContent = `0${currentItem}`;
     })
 
+    //Calculator
 
+    const result = document.querySelector('.calculating__result span');
+    let sex, height, age, weight, ratio;
+
+    function calcTotal(){
+        if(!sex || !height || !age || !weight || !ratio ) {
+            result.textContent = '______';
+            return;
+        }
+        if (sex === 'female') {
+            result.textContent = (447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age) * ratio);
+        } else {
+            result.textContent = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age) * ratio);
+        }
+    }
+    function getStaticData(parentSelector,activeClass) {
+        const elements = document.querySelectorAll(`${parentSelector} div`);
+        document.querySelector(parentSelector).addEventListener('click', (e) => {
+           if(e.target.getAttribute('data-ratio')) {
+                ratio = +e.target.getAttribute('data-ratio')
+           }else {
+               sex = e.target.getAttribute('id')
+           }
+
+        console.log('ratio>>>', ratio)
+        console.log('sex>>>', sex)
+        elements.forEach(element =>{
+            element.classList.remove(activeClass);
+        })
+        e.target.classList.add(activeClass);
+    });
+    }
+    getStaticData('#gender','calculating__choose-item_active');
+    getStaticData('#ratio','calculating__choose-item_active');
+    calcTotal();
 });
