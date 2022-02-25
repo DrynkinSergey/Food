@@ -23,10 +23,10 @@ window.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    tabsParent.addEventListener('click', (event, i) => {
+    tabsParent.addEventListener('click', (event) => {
         if (event.target && event.target.matches('div.tabheader__item')) {
             tabs.forEach((tab, i) => {
-                if (tab == event.target) {
+                if (tab === event.target) {
                     hideTabsContent();
                     showCurrentTab(i);
                 }
@@ -96,7 +96,7 @@ window.addEventListener('DOMContentLoaded', () => {
     })
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal || e.target.getAttribute('data-close') == '') {
+        if (e.target === modal || e.target.getAttribute('data-close') === '') {
             closeModal();
         }
     })
@@ -293,7 +293,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     nextSlide.addEventListener('click', ()=> {
-        if(offset == getRegExp(width) * (sliderItem.length - 1))  {
+        if(offset === getRegExp(width) * (sliderItem.length - 1))  {
             offset = 0;
         } else {
             offset+= getRegExp(width)
@@ -308,7 +308,7 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     prevSlide.addEventListener('click', ()=> {
-        if( offset == 0)  {
+        if( offset === 0)  {
             offset = getRegExp(width) * (sliderItem.length - 1)
         } else {
             offset-= getRegExp(width)
@@ -333,29 +333,59 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
         if (sex === 'female') {
-            result.textContent = (447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age) * ratio);
+            result.textContent = (447.6 + (9.2 * weight) + (3.1 * height) - (4.3 * age) * ratio).toFixed(2);
         } else {
-            result.textContent = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age) * ratio);
+            result.textContent = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age) * ratio).toFixed(2);
         }
     }
     function getStaticData(parentSelector,activeClass) {
         const elements = document.querySelectorAll(`${parentSelector} div`);
+        elements.forEach(el => {
+            el.classList.remove(activeClass);
+            }
+        )
         document.querySelector(parentSelector).addEventListener('click', (e) => {
            if(e.target.getAttribute('data-ratio')) {
                 ratio = +e.target.getAttribute('data-ratio')
+               calcTotal();
+
            }else {
                sex = e.target.getAttribute('id')
+               calcTotal();
+
            }
 
-        console.log('ratio>>>', ratio)
-        console.log('sex>>>', sex)
         elements.forEach(element =>{
             element.classList.remove(activeClass);
         })
         e.target.classList.add(activeClass);
     });
     }
+
+    function getChangedData() {
+        document.querySelector('#ratio').addEventListener('input', (e) => {
+            if (e.target.id === 'height'){
+               height = getRegExp(e.target.value);
+                calcTotal();
+
+            }
+            if (e.target.id === 'age'){
+                age = getRegExp(e.target.value);
+                calcTotal();
+            }
+            if (e.target.id === 'weight'){
+                weight = getRegExp(e.target.value);
+                calcTotal();
+            }
+        })
+
+
+    }
+    getChangedData();
     getStaticData('#gender','calculating__choose-item_active');
-    getStaticData('#ratio','calculating__choose-item_active');
-    calcTotal();
+    getStaticData('#activity','calculating__choose-item_active');
+   /* const AllField = document.querySelectorAll('.calculating__choose-item');
+    AllField.forEach((field) => field.addEventListener('click',     getChangedData) )
+*/
+
 });
