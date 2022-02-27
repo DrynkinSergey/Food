@@ -325,7 +325,7 @@ window.addEventListener('DOMContentLoaded', () => {
     //Calculator
 
     const result = document.querySelector('.calculating__result span');
-    let sex, height, age, weight, ratio;
+    let sex = 'female', height, age, weight, ratio = 1.375;
 
     function calcTotal(){
         if(!sex || !height || !age || !weight || !ratio ) {
@@ -338,45 +338,47 @@ window.addEventListener('DOMContentLoaded', () => {
             result.textContent = (88.36 + (13.4 * weight) + (4.8 * height) - (5.7 * age) * ratio).toFixed(2);
         }
     }
+const buttons = document.querySelectorAll('div .calculating__choose-item');
+    console.log(buttons);
+
+
     function getStaticData(parentSelector,activeClass) {
         const elements = document.querySelectorAll(`${parentSelector} div`);
-        elements.forEach(el => {
-            el.classList.remove(activeClass);
-            }
-        )
-        document.querySelector(parentSelector).addEventListener('click', (e) => {
-           if(e.target.getAttribute('data-ratio')) {
-                ratio = +e.target.getAttribute('data-ratio')
-               calcTotal();
 
-           }else {
-               sex = e.target.getAttribute('id')
-               calcTotal();
+        elements.forEach(elem => {
+            elem.addEventListener('click', (e) => {
+                if (e.target.getAttribute('data-ratio')) {
+                    ratio = +e.target.getAttribute('data-ratio')
+                } else {
+                    sex = e.target.getAttribute('id')
 
-           }
+                }
+                elements.forEach(elem => {
+                    elem.classList.remove(activeClass);
 
-        elements.forEach(element =>{
-            element.classList.remove(activeClass);
-        })
-        e.target.classList.add(activeClass);
-    });
+                });
+                e.target.classList.add(activeClass);
+                calcTotal();
+
+            })
+        });
     }
+
 
     function getChangedData() {
         document.querySelector('#ratio').addEventListener('input', (e) => {
             if (e.target.id === 'height'){
                height = getRegExp(e.target.value);
-                calcTotal();
 
             }
             if (e.target.id === 'age'){
                 age = getRegExp(e.target.value);
-                calcTotal();
             }
             if (e.target.id === 'weight'){
                 weight = getRegExp(e.target.value);
-                calcTotal();
             }
+            calcTotal();
+
         })
 
 
