@@ -365,9 +365,28 @@ const buttons = document.querySelectorAll('div .calculating__choose-item');
     }
 
 
-    function getChangedData() {
-        document.querySelector('#ratio').addEventListener('input', (e) => {
-            if (e.target.id === 'height'){
+    function getChangedData(selector) {
+        const input = document.querySelector(selector);
+        document.querySelector(selector).addEventListener('input', () => {
+           if( input.value.match(/\D/g) ){
+               input.style.border='2px solid red'
+           }
+           else {
+               input.style.border = 'none'
+           }
+           switch (input.getAttribute('id')){
+               case 'height':
+                   height = getRegExp(input.value);
+                   break;
+               case 'age':
+                   age = getRegExp(input.value);
+                   break;
+               case 'weight':
+                   weight = getRegExp(input.value);
+                   break;
+           }
+        calcTotal();
+            /*if (e.target.id === 'height'){
                height = getRegExp(e.target.value);
 
             }
@@ -377,13 +396,15 @@ const buttons = document.querySelectorAll('div .calculating__choose-item');
             if (e.target.id === 'weight'){
                 weight = getRegExp(e.target.value);
             }
-            calcTotal();
+            calcTotal();*/
 
         })
 
 
     }
-    getChangedData();
+    getChangedData('#age');
+    getChangedData('#height');
+    getChangedData('#weight');
     getStaticData('#gender','calculating__choose-item_active');
     getStaticData('#activity','calculating__choose-item_active');
    /* const AllField = document.querySelectorAll('.calculating__choose-item');
