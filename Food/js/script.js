@@ -14,6 +14,16 @@ window.addEventListener('DOMContentLoaded', () => {
     cards();
     forms();
     timer();
-    slider();
+    slider(
+        {
+            sliderContainer:'.offer__slider',
+            slide:'.offer__slide',
+            nextArrow: '.offer__slider-next',
+            prevArrow: '.offer__slider-prev',
+            currentSlide: '#current', // number of slide
+            sliderField:'.offer__slider-inner', // all length slider hide
+            slideWrapper: '.offer__slider-wrapper' //visible slide in inner / window
+        }
+    );
 
 });

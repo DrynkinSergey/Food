@@ -1,29 +1,29 @@
 export const getRegExp = (str) => {
+    //function for convert string to numbers use regular expression
     return +str.replace(/\D/g, '');
 }
 
-function slider() {
-    //slider
 
+function slider({sliderContainer, slide, nextArrow, prevArrow, currentSlide, slideWrapper, sliderField}) {
 
-    const slider = document.querySelector('.offer__slider');
-    const sliderItem = slider.querySelectorAll('.offer__slide');
+    const slider = document.querySelector(sliderContainer); //slider container
+    const sliderItem = slider.querySelectorAll(slide); // one slide
     let currentItem = 1;
-    const nextSlide = slider.querySelector('.offer__slider-next'),
-        prevSlide = slider.querySelector('.offer__slider-prev'),
-        current = slider.querySelector('#current'),
-        slidesWrapper = document.querySelector('.offer__slider-wrapper'),
-        slidesField = slidesWrapper.querySelector('.offer__slider-inner');
+    const nextSlide = slider.querySelector(nextArrow), //next slide
+        prevSlide = slider.querySelector(prevArrow), //prev slide
+        current = slider.querySelector(currentSlide), // number of slide
+        slidesWrapper = document.querySelector(slideWrapper), //visible slide in inner / window
+        slidesField = slidesWrapper.querySelector(sliderField); // all length slider hide
 
-    let width = window.getComputedStyle(slidesWrapper).width;
-    let offset = 0;
+    let width = window.getComputedStyle(slidesWrapper).width; //take computed style from element, and get width
+    let offset = 0; // zone of visible
 
 
-    slidesField.style.width = 100 * sliderItem.length + '%';
+    slidesField.style.width = 100 * sliderItem.length + '%'; // set field width 400%
     slidesField.style.display = 'flex';
     slidesField.style.transition = '.5s all'
     sliderItem.forEach(slide => {
-        slide.style.width = width;
+        slide.style.width = width; // change all slide for one size
     });
     slidesWrapper.style.overflow = 'hidden';
     if (currentItem <= 9) {
