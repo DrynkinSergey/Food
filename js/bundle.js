@@ -420,12 +420,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function tabs() {
+function tabs({tab, tabName, tabNameParent,activeTabClass}) {
 
 
-    const tabsContent = document.querySelectorAll('.tabcontent'),
-        tabs = document.querySelectorAll('.tabheader__item'),
-        tabsParent = document.querySelector('.tabheader__items');
+    const tabsContent = document.querySelectorAll(tab),
+        tabs = document.querySelectorAll(tabName),
+        tabsParent = document.querySelector(tabNameParent);
 
     function hideTabsContent() {
         tabsContent.forEach(tab => {
@@ -433,19 +433,19 @@ function tabs() {
             tab.classList.remove('show', 'fade');
         });
         tabs.forEach(tab => {
-            tab.classList.remove('tabheader__item_active');
+            tab.classList.remove(activeTabClass);
         })
     }
 
     function showCurrentTab(i = 0) {
         tabsContent[i].classList.add('show', 'fade');
         tabsContent[i].classList.remove('hide')
-        tabs[i].classList.add('tabheader__item_active');
+        tabs[i].classList.add(activeTabClass);
 
     }
 
     tabsParent.addEventListener('click', (event) => {
-        if (event.target && event.target.matches('div.tabheader__item')) {
+        if (event.target && event.target.matches(`div${tabName}`)) {
             tabs.forEach((tab, i) => {
                 if (tab === event.target) {
                     hideTabsContent();
@@ -454,8 +454,6 @@ function tabs() {
             })
         }
     });
-
-
     hideTabsContent();
     showCurrentTab();
 }
@@ -474,9 +472,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-function timer() {
-
-    const deadline = '2022-03-30';
+function timer({timerSelector, deadline, daysSelector, hoursSelector, minutesSelector, secondsSelector}) {
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -494,12 +490,12 @@ function timer() {
         }
     }
 
-    function startTimer(selector, endtime) {
-        const timer = document.querySelector(selector),
-            days = timer.querySelector('#days'),
-            hours = timer.querySelector('#hours'),
-            minutes = timer.querySelector('#minutes'),
-            seconds = timer.querySelector('#seconds');
+    function startTimer(timerSelector, endtime) {
+        const timer = document.querySelector(timerSelector),
+            days = timer.querySelector(daysSelector),
+            hours = timer.querySelector(hoursSelector),
+            minutes = timer.querySelector(minutesSelector),
+            seconds = timer.querySelector(secondsSelector);
 
         function zeroPad(time) {
             if (time >= 0 && time < 10) {
@@ -518,10 +514,9 @@ function timer() {
         updateTimer();
         let timerInterval = setInterval(updateTimer, 1000);
 
-
     }
 
-    startTimer('.timer', deadline);
+    startTimer(timerSelector, deadline);
 }
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (timer);
@@ -608,12 +603,26 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])();
+    (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_0__["default"])(
+        {
+            tab: '.tabcontent',
+            tabName: '.tabheader__item',
+            tabNameParent : '.tabheader__items',
+            activeTabClass: 'tabheader__item_active'
+        }
+    );
     (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])('[data-modal]','.modal');
     (0,_modules_calc__WEBPACK_IMPORTED_MODULE_2__["default"])();
     (0,_modules_cards__WEBPACK_IMPORTED_MODULE_3__["default"])();
     (0,_modules_forms__WEBPACK_IMPORTED_MODULE_4__["default"])();
-    (0,_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])();
+    (0,_modules_timer__WEBPACK_IMPORTED_MODULE_5__["default"])({
+        timerSelector : '.timer',
+        deadline : '2022-03-30',
+        daysSelector: '#days',
+        hoursSelector: '#hours',
+        minutesSelector: '#minutes',
+        secondsSelector: '#seconds',
+    });
     (0,_modules_slider__WEBPACK_IMPORTED_MODULE_6__["default"])(
         {
             sliderContainer:'.offer__slider',

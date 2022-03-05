@@ -8,12 +8,26 @@ import slider from  './modules/slider';
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    tabs();
+    tabs(
+        {
+            tab: '.tabcontent',
+            tabName: '.tabheader__item',
+            tabNameParent : '.tabheader__items',
+            activeTabClass: 'tabheader__item_active'
+        }
+    );
     modal('[data-modal]','.modal');
     calc();
     cards();
     forms();
-    timer();
+    timer({
+        timerSelector : '.timer',
+        deadline : '2022-03-30',
+        daysSelector: '#days',
+        hoursSelector: '#hours',
+        minutesSelector: '#minutes',
+        secondsSelector: '#seconds',
+    });
     slider(
         {
             sliderContainer:'.offer__slider',

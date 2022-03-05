@@ -1,6 +1,4 @@
-function timer() {
-
-    const deadline = '2022-03-30';
+function timer({timerSelector, deadline, daysSelector, hoursSelector, minutesSelector, secondsSelector}) {
 
     function getTimeRemaining(endtime) {
         const t = Date.parse(endtime) - Date.parse(new Date()),
@@ -18,12 +16,12 @@ function timer() {
         }
     }
 
-    function startTimer(selector, endtime) {
-        const timer = document.querySelector(selector),
-            days = timer.querySelector('#days'),
-            hours = timer.querySelector('#hours'),
-            minutes = timer.querySelector('#minutes'),
-            seconds = timer.querySelector('#seconds');
+    function startTimer(timerSelector, endtime) {
+        const timer = document.querySelector(timerSelector),
+            days = timer.querySelector(daysSelector),
+            hours = timer.querySelector(hoursSelector),
+            minutes = timer.querySelector(minutesSelector),
+            seconds = timer.querySelector(secondsSelector);
 
         function zeroPad(time) {
             if (time >= 0 && time < 10) {
@@ -42,10 +40,9 @@ function timer() {
         updateTimer();
         let timerInterval = setInterval(updateTimer, 1000);
 
-
     }
 
-    startTimer('.timer', deadline);
+    startTimer(timerSelector, deadline);
 }
 
 export default  timer;
